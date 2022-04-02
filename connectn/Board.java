@@ -15,8 +15,13 @@ public class Board {
 		for (int i = 0; i < 4; i++) {
 			board.add("*".repeat(7));
 		}
+
 		columnCheck = new ArrayList<Integer>(Collections.nCopies(7, 3));
 		columnsAvailable = 7;
+
+		columnStatus = new ArrayList<Integer>(Collections.nCopies(7, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
+		diagStatus = new ArrayList<Integer>(Collections.nCopies(7, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
+		reverseDiagStatus = new ArrayList<Integer>(Collections.nCopies(7, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
 	}
 
 	public Board(int rows) {
@@ -26,6 +31,10 @@ public class Board {
 		}
 		columnCheck = new ArrayList<Integer>(Collections.nCopies(rows + 3, rows - 1));
 		columnsAvailable = rows + 3;
+
+		columnStatus = new ArrayList<Integer>(Collections.nCopies(rows + 3, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
+		diagStatus = new ArrayList<Integer>(Collections.nCopies(rows + 3, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
+		reverseDiagStatus = new ArrayList<Integer>(Collections.nCopies(rows + 3, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
 	}
 
 	public void printBoard() {
@@ -33,8 +42,13 @@ public class Board {
 		for (int i = 0; i < board.size(); i++) {
 			System.out.println(board.get(i));
 		}
-		System.out.println("columnCheck:");
-		System.out.println(columnCheck.toString());
+		System.out.println("columnCheck: " + columnCheck.toString());
 		System.out.println("columns available: " + columnsAvailable);
+		System.out.println("");
+		System.out.println("columnStatus: " + columnStatus.toString());
+		System.out.println("diagStatus: " + diagStatus.toString());
+		System.out.println("reverseDiagStatus: " + reverseDiagStatus.toString());
 	}
+
+
 }
