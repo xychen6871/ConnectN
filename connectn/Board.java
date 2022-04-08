@@ -27,14 +27,14 @@ public class Board {
 	public Board(int rows) {
 		rows = Math.min(8,Math.max(3,rows));
 		for (int i = 0; i < rows; i++) {
-			board.add("*".repeat(rows + 3));
+			board.add("*".repeat(2 * rows - 1));
 		}
-		columnCheck = new ArrayList<Integer>(Collections.nCopies(rows + 3, rows - 1));
-		columnsAvailable = rows + 3;
+		columnCheck = new ArrayList<Integer>(Collections.nCopies(2 * rows - 1, rows - 1));
+		columnsAvailable = 2 * rows - 1;
 
-		columnStatus = new ArrayList<Integer>(Collections.nCopies(rows + 3, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
-		diagStatus = new ArrayList<Integer>(Collections.nCopies(rows + 3, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
-		reverseDiagStatus = new ArrayList<Integer>(Collections.nCopies(rows + 3, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
+		columnStatus = new ArrayList<Integer>(Collections.nCopies(2 * rows - 1, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
+		diagStatus = new ArrayList<Integer>(Collections.nCopies(2 * rows - 1, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
+		reverseDiagStatus = new ArrayList<Integer>(Collections.nCopies(2 * rows - 1, 0)); // +1 for Player 1, -1 for Player 2, 0 if unoccupied
 	}
 
 	public void printBoard() {
@@ -44,11 +44,62 @@ public class Board {
 		}
 		System.out.println("columnCheck: " + columnCheck.toString());
 		System.out.println("columns available: " + columnsAvailable);
-		System.out.println("");
+		System.out.println("Statuses:");
 		System.out.println("columnStatus: " + columnStatus.toString());
 		System.out.println("diagStatus: " + diagStatus.toString());
 		System.out.println("reverseDiagStatus: " + reverseDiagStatus.toString());
+		System.out.println("");
 	}
 
+	public int checkColumnWin() {
+		for (int i = 0; i < columnCheck.size(); i++) {
+			if (Math.abs(columnCheck.get(i)) == board.size()) {
+				return (columnCheck.get(i) > 0) ? 1 : 2; // if columnCheck[i] == -rows, player 2 wins, else player 1 wins
+			}
+		}
+		return 0; // No winner
+	}
 
+	public int checkDiagWin() {
+		for (int i = 0; i < diagStatus.size(); i++) {
+			if (Math.abs(diagStatus.get(i)) == board.size()) {
+				return (diagStatus.get(i) > 0) ? 1 : 2; // if diagStatus[i] == -rows, player 2 wins, else player 1 wins
+			}
+		}
+
+		for (int i = 0; i < reverseDiagStatus.size(); i++) {
+			if (Math.abs(reverseDiagStatus.get(i)) == board.size()) {
+				return (reverseDiagStatus.get(i) > 0) ? 1 : 2; // if reverseDiagStatus[i] == -rows, player 2 wins, else player 1 wins
+			}
+		}
+		return 0; // No winner
+	}
+
+	public int checkHorizontalWin() {
+		int rows = board.size();
+		for (int i = 0; i < rows; i++) {
+			List<Integer> prefixSum = new ArrayList<Integer>();
+			Integer pSum = 0;
+			//prefixSum.add(0);
+			for (int j = rows; j < 2 * rows - 1; j++) {
+				char c = board.get(i).charAt(j);
+				if (c == 'O') {
+					pSum++;
+				} else if (c == 'X') {
+					pSum--;
+				}
+				prefixSum.add(pSum);
+			}
+
+			for (int j = rows; j < 2 * rows - 1; j++) {
+				int end = prefixSum.get(j);
+				int start = (j - rows >= 0) ? prefixSum.get(j - rows) : 0;
+				if (Math.abs(end - start) == rows) {
+					return (end - start > 0) ? 1 : 2; // O * rows  -> Player 1, X * rows -> Player 2 
+				}
+			}
+		}
+
+		return 0;
+	}
 }
