@@ -102,4 +102,52 @@ public class Board {
 
 		return 0;
 	}
+
+	public boolean canStillPlay() {
+		return (columnsAvailable > 0);
+	}
+
+	public boolean placeToken(int column, char token) {
+		if (token != 'X' && token != 'O') {
+			System.out.println("Illegal token used.");
+			return false;
+		} else if (column < 0 || column >= columnStatus.size()) {
+			System.out.println("Column indexed must be between 0 and number of columns - 1 inclusive.");
+			return false;
+		} else if (canStillPlay() == false) {
+			System.out.println("No more columns available");
+			return false;
+		}
+		int rowIdx = columnCheck.get(column);
+		if (rowIdx < 0) {
+			System.out.println("Column is fully occupied.");
+		}
+
+		String currRow = board.get(column);
+		currRow = currRow.substring(0, column) + token + currRow.substring(column + 1); // update board
+
+		int val = (token == 'O') ? 1 : -1;
+		
+		// update column status
+		columnStatus.set(column, columnStatus.get(column) + val);
+		
+		// update diagonal status
+		int diagIdx = column - rowIdx;
+		if (diagIdx >= 0) {
+			diagStatus.set(diagIdx, diagStatus.get(diagIdx) + val);
+		}
+
+		// update reverse diagonal status
+		int rDiagIdx = column + rowIdx;
+		if (rDiagIdx < columnStatus.size()) {
+			reverseDiagStatus.set(rDiagIdx, reverseDiagStatus.get(rDiagIdx) + val);
+		}
+
+		// update columnCheck
+		columnCheck.set(column, rowIdx - 1);
+		if (rowIdx == 0) {
+			columnsAvailable--;
+		}
+		return true;
+	}
 }
