@@ -103,6 +103,22 @@ public class Board {
 		return 0;
 	}
 
+	public int checkWin() {
+		// 0 --> no winner, 1 --> Player 1 wins, 2 --> Player 2 wins
+		int cWin = checkColumnWin();
+		if (cWin) {
+			return cWin;
+		}
+
+		int hWin = checkHorizontalWin();
+		if (hWin != 0) {
+			return hWin;
+		}
+
+		int dWin = checkDiagWin();
+		return dWin;
+	}
+
 	public boolean canStillPlay() {
 		return (columnsAvailable > 0);
 	}
