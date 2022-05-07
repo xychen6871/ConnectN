@@ -52,9 +52,9 @@ public class Board {
 	}
 
 	public int checkColumnWin() {
-		for (int i = 0; i < columnCheck.size(); i++) {
-			if (Math.abs(columnCheck.get(i)) == board.size()) {
-				return (columnCheck.get(i) > 0) ? 1 : 2; // if columnCheck[i] == -rows, player 2 wins, else player 1 wins
+		for (int i = 0; i < columnStatus.size(); i++) {
+			if (Math.abs(columnStatus.get(i)) == board.size()) {
+				return (columnStatus.get(i) > 0) ? 1 : 2; // if columnCheck[i] == -rows, player 2 wins, else player 1 wins
 			}
 		}
 		return 0; // No winner
@@ -81,7 +81,7 @@ public class Board {
 			List<Integer> prefixSum = new ArrayList<Integer>();
 			Integer pSum = 0;
 			//prefixSum.add(0);
-			for (int j = rows; j < 2 * rows - 1; j++) {
+			for (int j = 0; j < 2 * rows - 1; j++) {
 				char c = board.get(i).charAt(j);
 				if (c == 'O') {
 					pSum++;
@@ -91,7 +91,7 @@ public class Board {
 				prefixSum.add(pSum);
 			}
 
-			for (int j = rows; j < 2 * rows - 1; j++) {
+			for (int j = 0; j < 2 * rows - 1; j++) {
 				int end = prefixSum.get(j);
 				int start = (j - rows >= 0) ? prefixSum.get(j - rows) : 0;
 				if (Math.abs(end - start) == rows) {
@@ -106,7 +106,7 @@ public class Board {
 	public int checkWin() {
 		// 0 --> no winner, 1 --> Player 1 wins, 2 --> Player 2 wins
 		int cWin = checkColumnWin();
-		if (cWin) {
+		if (cWin != 0) {
 			return cWin;
 		}
 
@@ -137,11 +137,12 @@ public class Board {
 		int rowIdx = columnCheck.get(column);
 		if (rowIdx < 0) {
 			System.out.println("Column is fully occupied.");
+			return false;
 		}
 
-		String currRow = board.get(column);
+		String currRow = board.get(rowIdx);
 		currRow = currRow.substring(0, column) + token + currRow.substring(column + 1); // update board
-
+		board.set(rowIdx, currRow);
 		int val = (token == 'O') ? 1 : -1;
 		
 		// update column status

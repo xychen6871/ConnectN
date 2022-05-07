@@ -21,6 +21,6 @@ public class ConnectNGame {
 			return;
 		}
 		ConnectN board = new ConnectN(rows);
-		board.print();
+		board.play();
 	}
 }

@@ -27,7 +27,7 @@ public class ConnectN {
 			return;
 		}
 
-		/*
+		System.out.println("Ready!");
 		while (ConnectNBoard.canStillPlay() == true && ConnectNBoard.checkWin() == 0) {
 			print();
 			if (turn % 2 == 0) {
@@ -40,8 +40,8 @@ public class ConnectN {
 			int column = -1;
 			Scanner io = new Scanner(System.in);
 			try {
-				column = in.nextInt();
-			} except {
+				column = io.nextInt();
+			} catch (Exception e) {
 				column = -1;
 			}
 			boolean valid = ConnectNBoard.placeToken(column, token);
@@ -51,7 +51,7 @@ public class ConnectN {
 			}
 
 		}
-
+		print();
 		int result = ConnectNBoard.checkWin();
 		if (result == 0) {
 			System.out.println("Draw");
@@ -61,7 +61,7 @@ public class ConnectN {
 			System.out.println("Player 2 wins");
 		}
 
-		*/
+		
 	}
 	
 }
